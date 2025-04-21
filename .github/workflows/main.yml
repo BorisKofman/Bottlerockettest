@@ -23,7 +23,7 @@ jobs:
       run: |
         echo "Using Bottlerocket SDK version: ${{ matrix.sdk_version }}"
         git clone https://github.com/bottlerocket-os/bottlerocket 
-        ls -la 
         cd bottlerocket/
+        ls -la 
         cargo build --bin devtool
         ./build/debug/devtool setup
