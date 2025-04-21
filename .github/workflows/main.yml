@@ -24,4 +24,5 @@ jobs:
         echo "Using Bottlerocket SDK version: ${{ matrix.sdk_version }}"
         git clone https://github.com/bottlerocket-os/bottlerocket /tmp/bottlerocket
         cd /tmp/bottlerocket
-        ./tools/devtool setup
+        cargo build --bin devtool
+        ./build/debug/devtool setup
