@@ -1,28 +1,25 @@
 name: Build Bottlerocket Kernel with Patch
-
 on:
   push:
-    branches:
-      - * # This workflow will run on any push to any branch
 
-  jobs:
-    build:
-      name: Patch and Build Kernel
-      runs-on: ubuntu-latest
-  
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-  
-      - name: Run Bottlerocket SDK in Docker
-        uses: addnab/docker-run-action@v3
-        with:
-          image: public.ecr.aws/bottlerocket/bottlerocket-sdk:x86_64-latest
-          options: -v ${{ github.workspace }}:/workspace
-          run: |
-            set -e
-            cd /workspace
-            ./tools/devtool setup
-            cp my-patch.patch sources/linux-kernel/
-            echo 'patches = ["my-patch.patch"]' >> sources/linux-kernel/Cargo.toml
-            ./tools/devtool build kernel-5.10
+jobs:
+  build:
+    name: Patch and Build Kernel
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run Bottlerocket SDK in Docker
+      uses: addnab/docker-run-action@v3
+      with:
+        image: public.ecr.aws/bottlerocket/bottlerocket-sdk:x86_64-latest
+        options: -v ${{ github.workspace }}:/workspace
+        run: |
+          set -e
+          cd /workspace
+          ./tools/devtool setup
+          cp my-patch.patch sources/linux-kernel/
+          echo 'patches = ["my-patch.patch"]' >> sources/linux-kernel/Cargo.toml
+          ./tools/devtool build kernel-5.10
