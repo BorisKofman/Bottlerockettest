@@ -18,8 +18,6 @@ jobs:
         options: -v ${{ github.workspace }}:/workspace
         run: |
           set -e
-          cd /workspace
+          git clone https://github.com/bottlerocket-os/bottlerocket /workspace/bottlerocket
+          cd /workspace/bottlerocket
           ./tools/devtool setup
-          cp my-patch.patch sources/linux-kernel/
-          echo 'patches = ["my-patch.patch"]' >> sources/linux-kernel/Cargo.toml
-          ./tools/devtool build kernel-5.10
