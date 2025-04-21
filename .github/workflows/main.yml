@@ -1,23 +1,27 @@
-name: Build Bottlerocket Kernel with Patch
+name: Build Bottlerocket Kernel (Matrix)
+
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Patch and Build Kernel
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        sdk_version: [x86_64-0.59.0, x86_64-0.60.0, x86_64-0.61.0]
+
+    container:
+      image: public.ecr.aws/bottlerocket/bottlerocket-sdk:${{ matrix.sdk_version }}
+      options: --user root
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Run Bottlerocket SDK in Docker
-      uses: addnab/docker-run-action@v3
-      with:
-        image: public.ecr.aws/bottlerocket/bottlerocket-sdk:v0.61.0
-        options: -v ${{ github.workspace }}:/workspace
-        run: |
-          mkdir -p /tmp/build
-          git clone https://github.com/bottlerocket-os/bottlerocket /tmp/build/bottlerocket
-          cd /tmp/build/bottlerocket
-          ./tools/devtool setup
+    - name: Build kernel
+      run: |
+        echo "Using Bottlerocket SDK version: ${{ matrix.sdk_version }}"
+        git clone https://github.com/bottlerocket-os/bottlerocket /tmp/bottlerocket
+        cd /tmp/bottlerocket
+        ./tools/devtool setup
