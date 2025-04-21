@@ -17,7 +17,7 @@ jobs:
         image: public.ecr.aws/bottlerocket/bottlerocket-sdk:v0.61.0
         options: -v ${{ github.workspace }}:/workspace
         run: |
-          set -e
-          git clone https://github.com/bottlerocket-os/bottlerocket /workspace/bottlerocket
-          cd /workspace/bottlerocket
+          mkdir -p /tmp/build
+          git clone https://github.com/bottlerocket-os/bottlerocket /tmp/build/bottlerocket
+          cd /tmp/build/bottlerocket
           ./tools/devtool setup
