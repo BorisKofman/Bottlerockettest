@@ -1,29 +1,17 @@
-name: Build Bottlerocket Kernel (Matrix)
+name: Build Kernel Module
 
 on:
-  push:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        sdk_version: [v0.61.0, v0.50.1]
-
-    container:
-      image: public.ecr.aws/bottlerocket/bottlerocket-sdk:${{ matrix.sdk_version }}
-      options: --user root
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Build kernel
-      run: |
-        echo "Using Bottlerocket SDK version: ${{ matrix.sdk_version }}"
-        git clone https://github.com/bottlerocket-os/bottlerocket 
-        cd bottlerocket/
-        ls -la 
-        cargo build --bin devtool
-        ./build/debug/devtool setup
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        run: echo "Building..."
