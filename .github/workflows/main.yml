@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: build-kernel-module
   cancel-in-progress: false
 
 jobs:
@@ -13,5 +13,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Sleep for 1 minute
+        run: sleep 60
+
       - name: Build
         run: echo "Building..."
